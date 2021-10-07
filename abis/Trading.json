@@ -1,0 +1,624 @@
+[
+  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "positionId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "margin",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newMargin",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newLeverage",
+        "type": "uint256"
+      }
+    ],
+    "name": "AddMargin",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "positionId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "productId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "bool",
+        "name": "isFullClose",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isLong",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "entryPrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "margin",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "leverage",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "pnl",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "pnlIsNegative",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "wasLiquidated",
+        "type": "bool"
+      }
+    ],
+    "name": "ClosePosition",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "positionId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "productId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isLong",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "margin",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "leverage",
+        "type": "uint256"
+      }
+    ],
+    "name": "NewPosition",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "positionId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "productId",
+        "type": "uint256"
+      }
+    ],
+    "name": "OpenOrder",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "positionId", "type": "uint256" }
+    ],
+    "name": "addMargin",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "productId", "type": "uint256" },
+      {
+        "components": [
+          { "internalType": "address", "name": "feed", "type": "address" },
+          { "internalType": "uint56", "name": "maxLeverage", "type": "uint56" },
+          { "internalType": "uint16", "name": "fee", "type": "uint16" },
+          { "internalType": "uint16", "name": "interest", "type": "uint16" },
+          { "internalType": "bool", "name": "isActive", "type": "bool" },
+          { "internalType": "uint64", "name": "maxExposure", "type": "uint64" },
+          {
+            "internalType": "uint64",
+            "name": "openInterestLong",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "openInterestShort",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint32",
+            "name": "oracleMaxDeviation",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "minTradeDuration",
+            "type": "uint32"
+          }
+        ],
+        "internalType": "struct Trading.Product",
+        "name": "_product",
+        "type": "tuple"
+      }
+    ],
+    "name": "addProduct",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "orderId", "type": "uint256" }
+    ],
+    "name": "cancelOrder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "positionId", "type": "uint256" }
+    ],
+    "name": "cancelPosition",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "productId", "type": "uint256" }
+    ],
+    "name": "getChainlinkPrice",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256[]", "name": "orderIds", "type": "uint256[]" }
+    ],
+    "name": "getOrders",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint64", "name": "positionId", "type": "uint64" },
+          { "internalType": "uint32", "name": "productId", "type": "uint32" },
+          { "internalType": "uint64", "name": "margin", "type": "uint64" },
+          { "internalType": "uint88", "name": "timestamp", "type": "uint88" },
+          { "internalType": "bool", "name": "isLong", "type": "bool" }
+        ],
+        "internalType": "struct Trading.Order[]",
+        "name": "_orders",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "limit", "type": "uint256" }
+    ],
+    "name": "getOrdersToSettle",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "_positionIds",
+        "type": "uint256[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint40",
+            "name": "closeOrderId",
+            "type": "uint40"
+          },
+          { "internalType": "uint24", "name": "productId", "type": "uint24" },
+          { "internalType": "uint64", "name": "leverage", "type": "uint64" },
+          { "internalType": "uint64", "name": "price", "type": "uint64" },
+          { "internalType": "uint64", "name": "margin", "type": "uint64" },
+          { "internalType": "address", "name": "owner", "type": "address" },
+          { "internalType": "uint88", "name": "timestamp", "type": "uint88" },
+          { "internalType": "bool", "name": "isLong", "type": "bool" }
+        ],
+        "internalType": "struct Trading.Position[]",
+        "name": "_positions",
+        "type": "tuple[]"
+      },
+      { "internalType": "uint256[]", "name": "_orderIds", "type": "uint256[]" },
+      {
+        "components": [
+          { "internalType": "uint64", "name": "positionId", "type": "uint64" },
+          { "internalType": "uint32", "name": "productId", "type": "uint32" },
+          { "internalType": "uint64", "name": "margin", "type": "uint64" },
+          { "internalType": "uint88", "name": "timestamp", "type": "uint88" },
+          { "internalType": "bool", "name": "isLong", "type": "bool" }
+        ],
+        "internalType": "struct Trading.Order[]",
+        "name": "_orders",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "positionIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "getPositions",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint40",
+            "name": "closeOrderId",
+            "type": "uint40"
+          },
+          { "internalType": "uint24", "name": "productId", "type": "uint24" },
+          { "internalType": "uint64", "name": "leverage", "type": "uint64" },
+          { "internalType": "uint64", "name": "price", "type": "uint64" },
+          { "internalType": "uint64", "name": "margin", "type": "uint64" },
+          { "internalType": "address", "name": "owner", "type": "address" },
+          { "internalType": "uint88", "name": "timestamp", "type": "uint88" },
+          { "internalType": "bool", "name": "isLong", "type": "bool" }
+        ],
+        "internalType": "struct Trading.Position[]",
+        "name": "_positions",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "productId", "type": "uint256" }
+    ],
+    "name": "getProduct",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "address", "name": "feed", "type": "address" },
+          { "internalType": "uint56", "name": "maxLeverage", "type": "uint56" },
+          { "internalType": "uint16", "name": "fee", "type": "uint16" },
+          { "internalType": "uint16", "name": "interest", "type": "uint16" },
+          { "internalType": "bool", "name": "isActive", "type": "bool" },
+          { "internalType": "uint64", "name": "maxExposure", "type": "uint64" },
+          {
+            "internalType": "uint64",
+            "name": "openInterestLong",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "openInterestShort",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint32",
+            "name": "oracleMaxDeviation",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "minTradeDuration",
+            "type": "uint32"
+          }
+        ],
+        "internalType": "struct Trading.Product",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "positionIds",
+        "type": "uint256[]"
+      },
+      { "internalType": "uint256[]", "name": "prices", "type": "uint256[]" }
+    ],
+    "name": "liquidatePositions",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "liquidationThreshold",
+    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxSettlementTime",
+    "outputs": [{ "internalType": "uint64", "name": "", "type": "uint64" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minMargin",
+    "outputs": [{ "internalType": "uint64", "name": "", "type": "uint64" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nextCloseOrderId",
+    "outputs": [{ "internalType": "uint48", "name": "", "type": "uint48" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nextPositionId",
+    "outputs": [{ "internalType": "uint48", "name": "", "type": "uint48" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "oracle",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "positionId", "type": "uint256" }
+    ],
+    "name": "releaseMargin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_oracle", "type": "address" }
+    ],
+    "name": "setOracle",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "setOwner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_treasury", "type": "address" }
+    ],
+    "name": "setTreasury",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "orderId", "type": "uint256" },
+      { "internalType": "uint256", "name": "price", "type": "uint256" }
+    ],
+    "name": "settleCloseOrder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "positionId", "type": "uint256" },
+      { "internalType": "uint256", "name": "price", "type": "uint256" }
+    ],
+    "name": "settleNewPosition",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "positionId", "type": "uint256" },
+      { "internalType": "uint256", "name": "margin", "type": "uint256" }
+    ],
+    "name": "submitCloseOrder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "productId", "type": "uint256" },
+      { "internalType": "bool", "name": "isLong", "type": "bool" },
+      { "internalType": "uint256", "name": "leverage", "type": "uint256" }
+    ],
+    "name": "submitNewPosition",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "treasury",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_minMargin", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_maxSettlementTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_liquidationThreshold",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateParams",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "productId", "type": "uint256" },
+      {
+        "components": [
+          { "internalType": "address", "name": "feed", "type": "address" },
+          { "internalType": "uint56", "name": "maxLeverage", "type": "uint56" },
+          { "internalType": "uint16", "name": "fee", "type": "uint16" },
+          { "internalType": "uint16", "name": "interest", "type": "uint16" },
+          { "internalType": "bool", "name": "isActive", "type": "bool" },
+          { "internalType": "uint64", "name": "maxExposure", "type": "uint64" },
+          {
+            "internalType": "uint64",
+            "name": "openInterestLong",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "openInterestShort",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint32",
+            "name": "oracleMaxDeviation",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "minTradeDuration",
+            "type": "uint32"
+          }
+        ],
+        "internalType": "struct Trading.Product",
+        "name": "_product",
+        "type": "tuple"
+      }
+    ],
+    "name": "updateProduct",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

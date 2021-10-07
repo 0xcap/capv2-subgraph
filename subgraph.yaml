@@ -1,0 +1,32 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Trading
+    network: arbitrum-one
+    source:
+      address: "0xA55Eee92a46A50A4C65908F28A0BE966D3e71633"
+      abi: Trading
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - AddMargin
+        - ClosePosition
+        - NewPosition
+        - OpenOrder
+      abis:
+        - name: Trading
+          file: ./abis/Trading.json
+      eventHandlers:
+        - event: AddMargin(indexed uint256,indexed address,uint256,uint256,uint256)
+          handler: handleAddMargin
+        - event: ClosePosition(uint256,indexed address,indexed uint256,indexed bool,bool,uint256,uint256,uint256,uint256,uint256,bool,bool)
+          handler: handleClosePosition
+        - event: NewPosition(indexed uint256,indexed address,indexed uint256,bool,uint256,uint256,uint256)
+          handler: handleNewPosition
+        - event: OpenOrder(indexed uint256,indexed address,indexed uint256)
+          handler: handleOpenOrder
+      file: ./src/mapping.ts

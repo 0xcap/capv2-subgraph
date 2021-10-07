@@ -1,0 +1,103 @@
+type Vault @entity {
+  
+  id: ID! # 1
+
+  balance: BigInt
+
+  cumulativeFees: BigInt
+  cumulativePnl: BigInt
+  cumulativeVolume: BigInt
+  cumulativeMargin: BigInt
+
+  positionCount: BigInt
+  tradeCount: BigInt
+
+}
+
+type Product @entity {
+  id: ID! # product id
+
+  cumulativeFees: BigInt
+  cumulativePnl: BigInt
+  cumulativeVolume: BigInt
+  cumulativeMargin: BigInt
+
+  positionCount: BigInt
+  tradeCount: BigInt
+
+}
+
+type Position @entity { # open position
+
+  id: ID! # position ID
+
+  productId: BigInt!
+  leverage: BigInt!
+  price: BigInt!
+  margin: BigInt!
+
+  amount: BigInt
+  liquidationPrice: BigInt
+
+  owner: Bytes!
+  
+  isLong: Boolean!
+
+  createdAtTimestamp: BigInt!
+  createdAtBlockNumber: BigInt!
+
+  updatedAtTimestamp: BigInt
+  updatedAtBlockNumber: BigInt
+
+}
+
+type Trade @entity { # closed position
+
+  id: ID! # unique: vault.tradeCount.toString()
+
+  txHash: String! # event.transaction.hash.toHexString()
+
+  positionId: BigInt!
+
+  owner: Bytes!
+
+  productId: BigInt!
+  margin: BigInt!
+  leverage: BigInt!
+
+  amount: BigInt
+  
+  entryPrice: BigInt!
+  closePrice: BigInt!
+
+  isLong: Boolean!
+  
+  fee: BigInt!
+  pnl: BigInt!
+
+  pnlIsNegative: Boolean!
+  wasLiquidated: Boolean!
+  isFullClose: Boolean!
+
+  duration: BigInt!
+  
+  timestamp: BigInt!
+  blockNumber: BigInt!
+
+}
+
+type VaultDayData @entity {
+
+  id: ID! # day id = event.block.timestamp / 86400 see https://github.com/Uniswap/uniswap-v3-subgraph/blob/1593a62059589bb1266d19bf18c5fa08fb68fe63/src/utils/intervalUpdates.ts#L43
+
+  date: BigInt! # dayStartTimestamp = dayID * 86400
+
+  cumulativeFees: BigInt
+  cumulativePnl: BigInt
+  cumulativeVolume: BigInt
+  cumulativeMargin: BigInt
+
+  positionCount: BigInt
+  tradeCount: BigInt
+
+}
