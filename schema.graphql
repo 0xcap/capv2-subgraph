@@ -33,7 +33,7 @@ type Position @entity { # open position
 
   productId: BigInt!
   leverage: BigInt!
-  price: BigInt!
+  price: BigInt
   margin: BigInt!
 
   amount: BigInt

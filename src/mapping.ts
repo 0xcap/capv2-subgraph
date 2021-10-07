@@ -18,6 +18,23 @@ export const BASE_FEE = BigInt.fromI32(25) // 0.25%
 export const LIQUIDATION_THRESHOLD = BigInt.fromI32(8000)
 export const BPS_SCALER = BigInt.fromI32(10000)
 
+function getVault(): Vault {
+  let vault = Vault.load((1).toString())
+  if (vault == null) {
+    vault = new Vault((1).toString())
+    vault.balance = ZERO_BI
+        
+    vault.cumulativeFees = ZERO_BI
+    vault.cumulativePnl = ZERO_BI
+    vault.cumulativeVolume = ZERO_BI
+    vault.cumulativeMargin = ZERO_BI
+
+    vault.positionCount = ZERO_BI
+    vault.tradeCount = ZERO_BI
+  }
+  return vault!
+}
+
 function getVaultDayData(event: ethereum.Event): VaultDayData {
 
   let timestamp = event.block.timestamp.toI32()
@@ -83,7 +100,7 @@ export function handleNewPosition(event: NewPosition): void {
   position.liquidationPrice = liquidationPrice
 
   // volume updates
-  let vault = Vault.load((1).toString())
+  let vault = getVault()
   vault.cumulativeFees = vault.cumulativeFees.plus(amount.times(BASE_FEE).div(BPS_SCALER))
   vault.cumulativeVolume = vault.cumulativeVolume.plus(amount)
   vault.cumulativeMargin = vault.cumulativeMargin.plus(event.params.margin)
@@ -121,7 +138,7 @@ export function handleAddMargin(event: AddMargin): void {
 
     // volume updates
 
-    let vault = Vault.load((1).toString())
+    let vault = getVault()
     vault.cumulativeMargin = vault.cumulativeMargin.plus(event.params.margin)
 
     let vaultDayData = getVaultDayData(event)
@@ -154,7 +171,7 @@ export function handleClosePosition(event: ClosePosition): void {
 
   if (position) {
 
-    let vault = Vault.load((1).toString())
+    let vault = getVault()
     let vaultDayData = getVaultDayData(event)
     let product = Product.load((event.params.productId).toString())
 
