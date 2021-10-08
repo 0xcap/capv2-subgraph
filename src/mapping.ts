@@ -15,7 +15,7 @@ export const ONE_BI = BigInt.fromI32(1)
 export const UNIT_BI = BigInt.fromI32(100000000)
 
 export const BASE_FEE = BigInt.fromI32(25) // 0.25%
-export const LIQUIDATION_THRESHOLD = BigInt.fromI32(8000)
+export const LIQUIDATION_THRESHOLD = BigInt.fromI32(8000) // 80%
 export const BPS_SCALER = BigInt.fromI32(10000)
 
 function getVault(): Vault {
